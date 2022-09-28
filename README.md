@@ -18,6 +18,15 @@ Task: Discuss potential issues with architecture 1 and 2.
 * Moving myEmailGUI such that it interfaces the userService directly (as in Architecture 3) would probably make more sense. As I understand it the myEmailGUI is mainly for managing your personal settings stored in the userStore, which is exactly what the userService should handle. The platformService would just end up forwarding everything between the myEmailGUI and the userService anyway.
 * To split the logic in userService and pricingService (and the corresponding databases) makes sense. Setting prices on products/services is not very connected to how we handle user settings. I think that Architecture 3 solves it nicer though; by not allowing the pricingService to read the userStore database directly it does not have to be bothered with HOW user data is stored in the database. Signaling what needs to be shared between the user- and pricingService instead makes it easier to make changes to the userStore, while keeping the interface between the services unchanged. 
 
+## Part 2
+
+Task: Code part of userService from architecture 3.
+
+1. TODO: Build a REST API for the myEmailGUI to update the email quota.
+2. TODO: Build a dummy implementation for calculating the updated price after the quota change
+3. TODO: Save the updated quota to the userStore database and the email platform
+4. TODO: Code up at least one automated test for your implementation
+5. TODO: Build a REST API for the supportToolsGUI to read a customer's email quota
 
 
 
