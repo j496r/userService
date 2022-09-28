@@ -22,7 +22,7 @@ Task: Discuss potential issues with architecture 1 and 2.
 
 Task: Code part of userService from architecture 3.
 
-1. TODO: Build a REST API for the myEmailGUI to update the email quota.
+1. TODO: Build a REST API for the myEmailGUI to update the email quota. X
 2. TODO: Build a dummy implementation for calculating the updated price after the quota change
 3. TODO: Save the updated quota to the userStore database and the email platform
 4. TODO: Code up at least one automated test for your implementation
