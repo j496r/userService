@@ -20,11 +20,11 @@ public class UserConfigurationServiceImpl implements UserConfigurationService {
 
     @Override
     @Transactional
-    public UserConfiguration updateUserConfiguration(Long userId, UserConfiguration newData)
+    public UserConfiguration updateUserConfiguration(Long userId, UserConfiguration newConfig)
             throws UserConfigurationNotFoundException, Exception {
 
         // Get new price
-        final HttpPricingResponse response = sendGetPriceRequestToPricingService(newData.getEmailQuotaInGB());
+        final HttpPricingResponse response = sendGetPriceRequestToPricingService(newConfig.getEmailQuotaInGB());
         if (response.statusCode() != 200) {
             throw new PricingRequestFailedException("Failed to retreave pricing for the specified quota");
         }
@@ -32,25 +32,30 @@ public class UserConfigurationServiceImpl implements UserConfigurationService {
         final int costForNewQuota = response.body().getTotalCostInCents();
 
         // Store to database
-        Optional<UserConfiguration> userInDb = userRepository.findById(userId);
-        if (!userInDb.isPresent()) {
+        Optional<UserConfiguration> userConfigInDb = userRepository.findById(userId);
+        if (!userConfigInDb.isPresent()) {
             throw new UserConfigurationNotFoundException("User was not found");
         }
 
-        UserConfiguration user = userInDb.get();
-        user.setEmailQuotaInGB(newData.getEmailQuotaInGB());
-        user.setTotalCostInCents(costForNewQuota);
+        UserConfiguration userConfig = userConfigInDb.get();
+        final int oldQuota = userConfig.getEmailQuotaInGB();
+        final int oldCost = userConfig.getTotalCostInCents();
+        userConfig.setEmailQuotaInGB(newConfig.getEmailQuotaInGB());
+        userConfig.setTotalCostInCents(costForNewQuota);
+
+        UserConfiguration updatedConfig = userRepository.save(userConfig);
 
         // Update email platform
-        int statusCode = sentUpdatedQuotaToEmailPlatform(user.getId(),
-                user.getEmailQuotaInGB());
+        int statusCode = sentUpdatedQuotaToEmailPlatform(updatedConfig.getId(),
+                updatedConfig.getEmailQuotaInGB());
         if (statusCode != 200) {
-            // TODO: Create specific exceptions for this case to provide better replies.
-            // TODO: Roll back database change if we fail to update quota on email platfrom
+            updatedConfig.setEmailQuotaInGB(oldQuota);
+            updatedConfig.setTotalCostInCents(oldCost);
+            userRepository.save(updatedConfig);
             throw new Exception("Failed to update quota on email platform.");
         }
 
-        return userRepository.save(user);
+        return updatedConfig;
     }
 
     @Override

@@ -2,7 +2,6 @@
 ## Part 1
 
 Task: Discuss potential issues with architecture 1 and 2.
-      TODO: Am I also supposed to give at least one thing speaking for using each architecture too? Circle back to this.
 
 ### Architecture 1: Centralized logic with an over use of "vendor specific interface".
 ![Arcitecture 1](images/arc1.png "Architecture 1")
@@ -18,6 +17,12 @@ Task: Discuss potential issues with architecture 1 and 2.
 * Moving myEmailGUI such that it interfaces the userService directly (as in Architecture 3) would probably make more sense. As I understand it the myEmailGUI is mainly for managing your personal settings stored in the userStore, which is exactly what the userService should handle. The platformService would just end up forwarding everything between the myEmailGUI and the userService anyway.
 * To split the logic in userService and pricingService (and the corresponding databases) makes sense. Setting prices on products/services is not very connected to how we handle user settings. I think that Architecture 3 solves it nicer though; by not allowing the pricingService to read the userStore database directly it does not have to be bothered with HOW user data is stored in the database. Signaling what needs to be shared between the user- and pricingService instead makes it easier to make changes to the userStore, while keeping the interface between the services unchanged. 
 
+### What speaks for using Arch1 over Arch2 and vice-versa?
+I did not understand if I was supposed to give at least one argument that spoke for using the different architectures. But if I should do that then, here goes: 
+If there is not much logic to be implemented in the emailService, and the traffic to the component
+is not expected to be that large then I guess Architercure 1 is simpler as you have all the
+information in one place. While architecture 2 seems easier to scale when needed.
+
 ## Part 2
 
 Task: Code part of userService from architecture 3.
@@ -29,8 +34,7 @@ Task: Code part of userService from architecture 3.
    Done: Not clear what we wanted the information for, but I chose to save it in the database and
          send it back to the myEmailGUI
 3. TODO: Save the updated quota to the userStore database and the email platform
-   Ongoing: Have to figure out how to best to a rollback of database changes if updating the email
-            platform fails.
+   Done: ...
 4. TODO: Code up at least one automated test for your implementation
    Done: Have two unit tests testing the service layer.
 5. TODO: Build a REST API for the supportToolsGUI to read a customer's email quota
