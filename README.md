@@ -22,11 +22,19 @@ Task: Discuss potential issues with architecture 1 and 2.
 
 Task: Code part of userService from architecture 3.
 
-1. TODO: Build a REST API for the myEmailGUI to update the email quota. X
+1. TODO: Build a REST API for the myEmailGUI to update the email quota. 
+   Done: PUT request http://localhost:8081/my-email-api/user-configurations/1 where emailQuotaInGB
+         should be specified in the body
 2. TODO: Build a dummy implementation for calculating the updated price after the quota change
+   Done: Not clear what we wanted the information for, but I chose to save it in the database and
+         send it back to the myEmailGUI
 3. TODO: Save the updated quota to the userStore database and the email platform
+   Ongoing: Have to figure out how to best to a rollback of database changes if updating the email
+            platform fails.
 4. TODO: Code up at least one automated test for your implementation
+   Done: Have two unit tests testing the service layer.
 5. TODO: Build a REST API for the supportToolsGUI to read a customer's email quota
+   Done: GET request of the form: http://localhost:8081/support-tool-api/user-configurations/1
 
 
 

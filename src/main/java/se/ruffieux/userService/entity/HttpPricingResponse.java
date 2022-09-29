@@ -9,7 +9,6 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 import java.net.http.HttpClient.Version;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;

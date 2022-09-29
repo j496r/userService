@@ -2,15 +2,10 @@ package se.ruffieux.userService.service;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import se.ruffieux.userService.entity.HttpPricingResponse;
 import se.ruffieux.userService.entity.UserConfiguration;
@@ -51,11 +46,20 @@ public class UserConfigurationServiceImpl implements UserConfigurationService {
                 user.getEmailQuotaInGB());
         if (statusCode != 200) {
             // TODO: Create specific exceptions for this case to provide better replies.
-            // TODO: Roll back database change if we fail to update quote on email platfrom
+            // TODO: Roll back database change if we fail to update quota on email platfrom
             throw new Exception("Failed to update quota on email platform.");
         }
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserConfiguration getUserConfiguration(Long userId) throws UserConfigurationNotFoundException {
+        Optional<UserConfiguration> userInDb = userRepository.findById(userId);
+        if (!userInDb.isPresent()) {
+            throw new UserConfigurationNotFoundException("User was not found");
+        }
+        return userInDb.get();
     }
 
     // Dummy code for talking with other services
