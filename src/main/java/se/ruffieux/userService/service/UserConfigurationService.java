@@ -1,8 +1,9 @@
 package se.ruffieux.userService.service;
 
-import se.ruffieux.userService.entity.User;
-import se.ruffieux.userService.error.UserNotFoundException;
+import se.ruffieux.userService.entity.UserConfiguration;
+import se.ruffieux.userService.error.UserConfigurationNotFoundException;
 
-public interface UserService {
-    public User updateUser(Long userId, User user) throws UserNotFoundException;
+public interface UserConfigurationService {
+    public UserConfiguration updateUser(Long userId, UserConfiguration user)
+            throws UserConfigurationNotFoundException, Exception;
 }

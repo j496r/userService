@@ -1,7 +1,7 @@
 package se.ruffieux.userService.error;
 
-public class UserNotFoundException extends Exception {
-    public UserNotFoundException(String message) {
+public class UserConfigurationNotFoundException extends Exception {
+    public UserConfigurationNotFoundException(String message) {
         super(message);
     }
 }
