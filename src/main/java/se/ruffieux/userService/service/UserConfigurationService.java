@@ -4,6 +4,6 @@ import se.ruffieux.userService.entity.UserConfiguration;
 import se.ruffieux.userService.error.UserConfigurationNotFoundException;
 
 public interface UserConfigurationService {
-    public UserConfiguration updateUser(Long userId, UserConfiguration user)
+    public UserConfiguration updateUserConfiguration(Long userId, UserConfiguration user)
             throws UserConfigurationNotFoundException, Exception;
 }

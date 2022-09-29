@@ -17,14 +17,14 @@ public class UserConfigurationController {
     @Autowired
     private UserConfigurationService userService;
 
-    @PutMapping("/users/{id}")
+    @PutMapping("my-email-api/user-configurations/{id}")
     UserConfiguration handleUserConfigurationUpdate(@PathVariable("id") Long userId,
             @RequestBody UserConfiguration user) throws Exception {
-        UserConfiguration update = userService.updateUser(userId, user);
+        UserConfiguration update = userService.updateUserConfiguration(userId, user);
         return update;
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("support-tool-api/user-configurations/{id}")
     UserConfiguration handleGetUserConfiguration(@RequestParam String param) {
         // TODO: send user data back (really there should be a check that it is the
         // correct user)

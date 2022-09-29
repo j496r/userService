@@ -18,8 +18,7 @@ import lombok.NoArgsConstructor;
 
 @Component
 public class HttpPricingResponse implements HttpResponse<HttpPricingResponse.PricingResponseBody> {
-    @Value("${pricing.response.status: 200}")
-    private int status;
+    public int status = 200;
 
     @Data
     @AllArgsConstructor

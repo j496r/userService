@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import se.ruffieux.userService.entity.HttpPricingResponse;
 import se.ruffieux.userService.entity.UserConfiguration;
+import se.ruffieux.userService.error.PricingRequestFailedException;
 import se.ruffieux.userService.error.UserConfigurationNotFoundException;
 import se.ruffieux.userService.repository.UserConfigurationRepository;
 
@@ -22,15 +24,14 @@ public class UserConfigurationServiceImpl implements UserConfigurationService {
     private UserConfigurationRepository userRepository;
 
     @Override
-    public UserConfiguration updateUser(Long userId, UserConfiguration newData)
+    @Transactional
+    public UserConfiguration updateUserConfiguration(Long userId, UserConfiguration newData)
             throws UserConfigurationNotFoundException, Exception {
 
         // Get new price
         final HttpPricingResponse response = sendGetPriceRequestToPricingService(newData.getEmailQuotaInGB());
-
         if (response.statusCode() != 200) {
-            // TODO: Create specific exceptions for this case to provide better replies.
-            throw new Exception("Failed to retreave pricing for the specified quota");
+            throw new PricingRequestFailedException("Failed to retreave pricing for the specified quota");
         }
 
         final int costForNewQuota = response.body().getTotalCostInCents();
@@ -50,6 +51,7 @@ public class UserConfigurationServiceImpl implements UserConfigurationService {
                 user.getEmailQuotaInGB());
         if (statusCode != 200) {
             // TODO: Create specific exceptions for this case to provide better replies.
+            // TODO: Roll back database change if we fail to update quote on email platfrom
             throw new Exception("Failed to update quota on email platform.");
         }
 
